@@ -2,8 +2,17 @@ serial.redirectToUSB()
 
 //Periodo del PWM
 pins.analogSetPeriod(AnalogPin.P0, 2000)
-pins.P0.analogWrite(50 * 10)
 let command: String
+let temp: Number
+
+basic.forever(()=>{
+    if (temp < input.temperature() && !pins.P6.digitalRead()  ) {
+        pins.P6.digitalWrite(true)
+    } else if (temp >= input.temperature() && pins.P6.digitalRead()) {
+        pins.P6.digitalWrite(false)
+    }
+    
+})
 
 serial.onDataReceived(serial.NEW_LINE, () => {
     let command = serial.readLine().split(" ")
@@ -12,9 +21,8 @@ serial.onDataReceived(serial.NEW_LINE, () => {
     try{
         switch (cmd) {
             case "LUZ":
-                let nPWM = parseInt(command.shift())
                 let brightness = command.shift()
-                    pins.P0.analogWrite(parseInt(brightness) * 10)
+                    pins.P0.analogWrite(parseInt(brightness) * 1023 / 100)
                     break
 
                 case "LOCK":
@@ -33,13 +41,7 @@ serial.onDataReceived(serial.NEW_LINE, () => {
                     break
 
                 case "TEMP":
-                    let temp = parseInt(command.shift())
-                    if (temp < input.temperature()){
-                        pins.P6.digitalWrite(true)
-                    }else{
-                        pins.P6.digitalWrite(false)
-                    }
-                    
+                    temp = parseInt(command.shift())
                     break
 
                 default:
