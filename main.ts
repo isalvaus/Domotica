@@ -32,6 +32,8 @@ serial.onDataReceived(serial.NEW_LINE, () => {
                     }else{
                         pins.P0.analogWrite((100 - brillo) * 1023 / 100)
                     }
+
+                    serial.writeLine(brillo.toString())
                     break
 
                 case "LOCK":
