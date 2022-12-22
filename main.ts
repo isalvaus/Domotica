@@ -4,15 +4,16 @@ serial.redirectToUSB()
 pins.analogSetPeriod(AnalogPin.P0, 2000)
 let command: String
 let temp: Number
+let brillo:number
 
-basic.forever(()=>{
+/*basic.forever(()=>{
     if (temp < input.temperature() && !pins.P6.digitalRead()  ) {
         pins.P6.digitalWrite(true)
     } else if (temp >= input.temperature() && pins.P6.digitalRead()) {
         pins.P6.digitalWrite(false)
     }
     
-})
+})*/
 
 serial.onDataReceived(serial.NEW_LINE, () => {
     let command = serial.readLine().split(" ")
@@ -22,7 +23,15 @@ serial.onDataReceived(serial.NEW_LINE, () => {
         switch (cmd) {
             case "LUZ":
                 let brightness = command.shift()
-                    pins.P0.analogWrite(parseInt(brightness) * 1023 / 100)
+                let brillo = parseInt(brightness)
+                    
+                    if (brillo <= 10){
+                        pins.P0.digitalWrite(true)
+                    }else if (brillo >= 90  && brillo < 100){
+                        pins.P0.digitalWrite(false)
+                    }else{
+                        pins.P0.analogWrite((100 - brillo) * 1023 / 100)
+                    }
                     break
 
                 case "LOCK":
