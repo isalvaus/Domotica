@@ -1,4 +1,5 @@
-serial.redirectToUSB()
+//serial.redirectToUSB()
+bluetooth.startUartService()
 
 //Periodo del PWM
 pins.analogSetPeriod(AnalogPin.P0, 2000)
@@ -6,17 +7,19 @@ let command: String
 let temp: Number
 let brillo:number
 
-/*basic.forever(()=>{
-    if (temp < input.temperature() && !pins.P6.digitalRead()  ) {
+
+loops.everyInterval(500, function() {
+    if (temp < input.temperature() && !pins.P6.digitalRead()) {
         pins.P6.digitalWrite(true)
     } else if (temp >= input.temperature() && pins.P6.digitalRead()) {
         pins.P6.digitalWrite(false)
     }
-    
-})*/
+})
 
-serial.onDataReceived(serial.NEW_LINE, () => {
-    let command = serial.readLine().split(" ")
+
+//Leemos los comandos del puerto serie y los ejeccutamos
+bluetooth.onUartDataReceived(serial.NEW_LINE, () => {
+    let command = bluetooth.uartReadUntil(bluetooth.NEW_LINE).split(" ")
     let cmd = command.shift().toUpperCase()
     
     try{
