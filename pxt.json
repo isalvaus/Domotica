@@ -1,5 +1,5 @@
 {
-    "name": "Domotica",
+    "name": "Domotica(Bluetooth)",
     "description": "",
     "dependencies": {
         "core": "*",

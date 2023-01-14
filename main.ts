@@ -17,8 +17,13 @@ loops.everyInterval(500, function() {
 })
 
 
+
+
+
+
 //Leemos los comandos del puerto serie y los ejeccutamos
 bluetooth.onUartDataReceived(serial.NEW_LINE, () => {
+
     let command = bluetooth.uartReadUntil(bluetooth.NEW_LINE).split(" ")
     let cmd = command.shift().toUpperCase()
     
